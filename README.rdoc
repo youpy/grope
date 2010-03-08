@@ -8,6 +8,7 @@ A non-GUI library to represent browser environment using WebKit Framework + Ruby
  env.document.title //=> "Example Web Page"
  env.eval('return window').location.href //=> "http://example.com/"
  env.xpath('//a')[0].href //=> "http://www.rfc-editor.org/rfc/rfc2606.txt"
+ env.xpath('//a')[0].offsetWidth //=> 58
 
 == Note on Patches/Pull Requests
  
