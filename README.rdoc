@@ -1,6 +1,13 @@
 = grope
 
-Description goes here.
+A non-GUI library to represent browser environment using WebKit Framework
+
+== Sypnosis
+
+ env = Grope::Env.open('http://example.com')
+ env.document.title.should eql('Example Web Page')
+ env.eval('return window').location.href.should eql('http://example.com/')
+ env.xpath('//a')[0].href.should eql('http://www.rfc-editor.org/rfc/rfc2606.txt')
 
 == Note on Patches/Pull Requests
  
