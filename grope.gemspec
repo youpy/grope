@@ -23,6 +23,7 @@ Gem::Specification.new do |s|
      "README.rdoc",
      "Rakefile",
      "VERSION",
+     "grope.gemspec",
      "lib/grope.rb",
      "lib/grope/dom_node_list.rb",
      "lib/grope/env.rb",
