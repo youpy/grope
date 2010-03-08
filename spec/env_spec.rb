@@ -9,7 +9,7 @@ describe Grope::Env do
   it "should initialize within a block" do
     result = Grope::Env.open('http://example.com') do |env|
       document = env.document
-      document.getElementsByTagName('a')[0].href.to_s
+      document.getElementsByTagName('a')[0].href
     end
 
     result.should eql('http://www.rfc-editor.org/rfc/rfc2606.txt')
@@ -21,7 +21,7 @@ describe Grope::Env do
     end
 
     result.size.should eql(1)
-    result[0].href.to_s.should eql('http://www.rfc-editor.org/rfc/rfc2606.txt')
+    result[0].href.should eql('http://www.rfc-editor.org/rfc/rfc2606.txt')
   end
 
   it "should eval" do
