@@ -1,6 +1,6 @@
 = grope
 
-A non-GUI library to represent browser environment using WebKit Framework
+A non-GUI library to represent browser environment using WebKit Framework + RubyCocoa
 
 == Sypnosis
 
