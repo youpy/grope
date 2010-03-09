@@ -2,7 +2,7 @@ module Grope
   class WSOWrapper
     instance_methods.each do |m|
       undef_method m unless m.to_s =~
-        /to_s|class|method_missing|respond_to?|^__/
+        /inspect|to_s|class|method_missing|respond_to?|^__/
     end
 
     include Enumerable
