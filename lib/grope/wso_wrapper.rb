@@ -18,7 +18,7 @@ module Grope
       when OSX::NSCFString
         value.to_s
       else
-        WSOWrapper.new(value)
+        new(value)
       end
     end
 
