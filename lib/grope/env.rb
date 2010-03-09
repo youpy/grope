@@ -30,7 +30,7 @@ module Grope
 
     def eval(js)
       wso = @webview.windowScriptObject
-      WSOWrapper.wrap(wso.evaluateWebScript_("(function() { %s })()" % js))
+      WSOWrapper.wrap(wso.evaluateWebScript("(function() { %s })()" % js))
     end
 
     def document
