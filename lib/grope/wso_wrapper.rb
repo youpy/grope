@@ -7,6 +7,8 @@ module Grope
 
     include Enumerable
 
+    attr_reader :wso
+
     def self.wrap(value)
       case value
       when nil
@@ -46,12 +48,21 @@ module Grope
       result = nil
 
       begin
-        result = @wso.__send__(name, *args)
+        if name.to_s =~ /^(apply|call|toString)$/
+          result = @wso.callWebScriptMethod_withArguments(name, args)
+        else
+          result = @wso.__send__(name, *args)
+        end
       rescue 
         result = @wso.valueForKey(name)
       end
 
-      self.class.wrap(result)
+      if WebScriptObject === result &&
+          result.callWebScriptMethod_withArguments(:toString, []).to_s =~ /^function/
+        self.class.wrap(result.callWebScriptMethod_withArguments(:call, [@wso] + args))
+      else
+        self.class.wrap(result)
+      end
     end
   end
 end

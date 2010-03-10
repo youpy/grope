@@ -35,6 +35,17 @@ describe Grope::Env do
     @env.document.URL.should eql('http://www.rfc-editor.org/rfc/rfc2606.txt')
   end
 
+  it "should get/call function" do
+    function = @env.eval('return function(x, y) { return x * y }')
+    function.call(false, 3, 5).should eql(15)
+    function.apply(false, [3, 5]).should eql(15)
+  end
+
+  it "should call function in object" do
+    obj = @env.eval('return { hello: function() { return "hello"; }}')
+    obj.hello.should eql('hello')
+  end
+
   it "should wait" do
     now = Time.now.to_i
 
