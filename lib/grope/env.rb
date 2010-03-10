@@ -39,6 +39,10 @@ JS
       end
     end
 
+    def wait(sec = 0)
+      run(sec) do; end
+    end
+
     def document
       eval('return document;')
     end
@@ -49,7 +53,7 @@ JS
 
     private
 
-    def run
+    def run(wait_sec = 0)
       @delegate.performSelector_withObject_afterDelay('timeout:', @webview, @options[:timeout])
 
       result = yield
@@ -58,6 +62,7 @@ JS
       run_loop.runMode_beforeDate(NSDefaultRunLoopMode, Time.now)
       while(@delegate.should_keep_running &&
           run_loop.runMode_beforeDate(NSDefaultRunLoopMode, Time.now + 0.1)); end
+      run_loop.runMode_beforeDate(NSDefaultRunLoopMode, Time.now + wait_sec)
 
       result
     ensure

@@ -29,4 +29,12 @@ describe Grope::Env do
     @env.eval('click(document.getElementsByTagName("a")[0])')
     @env.document.location.href.should eql('http://www.rfc-editor.org/rfc/rfc2606.txt')
   end
+
+  it "should wait" do
+    now = Time.now.to_i
+
+    @env.wait(3)
+
+    (Time.now.to_i - now).should be_close(3, 1)
+  end
 end
