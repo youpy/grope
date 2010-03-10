@@ -30,24 +30,19 @@ module Grope
       length
     end
 
-    def [](index)
-      self.class.wrap(@wso[index])
-    rescue
-      webScriptValueAtIndex(index)
-    end
-
     def each
       i = 0
       while i < size
-        yield self.class.wrap(self[i])
+        yield self[i]
         i += 1
       end
     end
 
     def method_missing(name, *args)
       result = nil
+
       begin
-        result = @wso.send(name, *args)
+        result = @wso.__send__(name, *args)
       rescue 
         result = @wso.valueForKey(name)
       end

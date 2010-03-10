@@ -44,7 +44,7 @@ JS
     end
 
     def document
-      eval('return document;')
+      WSOWrapper.wrap(@webview.mainFrame.DOMDocument)
     end
 
     def xpath(xpath)

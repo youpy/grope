@@ -16,6 +16,11 @@ describe Grope::Env do
     result[0].href.should eql('http://www.rfc-editor.org/rfc/rfc2606.txt')
   end
 
+  it "should get links" do
+    result = @env.document.links
+    result[0].href.should eql('http://www.rfc-editor.org/rfc/rfc2606.txt')
+  end
+
   it "should eval" do
     @env.eval('return window').location.href.should eql('http://example.com/')
   end
@@ -27,7 +32,7 @@ describe Grope::Env do
 
   it "should redirect by click" do
     @env.eval('click(document.getElementsByTagName("a")[0])')
-    @env.document.location.href.should eql('http://www.rfc-editor.org/rfc/rfc2606.txt')
+    @env.document.URL.should eql('http://www.rfc-editor.org/rfc/rfc2606.txt')
   end
 
   it "should wait" do
