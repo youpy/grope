@@ -9,9 +9,13 @@ module Grope
 
     def self.wrap(value)
       case value
+      when nil
+        nil
       when WSOWrapper
         value
       when Integer
+        value
+      when OSX::NSCFBoolean
         value
       when OSX::NSCFNumber
         value.to_i
