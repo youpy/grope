@@ -1,36 +1,42 @@
 module Grope
   class Env
-    def self.open(url, options = {}, &block)
-      options = {
+    def initialize(options = {})
+      @options = {
         :timeout => 60,
       }.merge(options)
 
-      webview = WebView.alloc
-      webview.initWithFrame(NSMakeRect(0,0,100,100))
-      webview.setPreferencesIdentifier('Grope')
-
-      delegate = FrameLoadDelegate.alloc.init
-      delegate.getURL(url, webview)
-      delegate.callback = block || Proc.new {|env| env }
-      delegate.should_keep_running = true
-      delegate.performSelector_withObject_afterDelay('timeout:', false, options[:timeout])
-
-      webview.setFrameLoadDelegate(delegate)
-
-      run_loop = NSRunLoop.currentRunLoop
-      while(delegate.should_keep_running &&
-          run_loop.runMode_beforeDate(NSDefaultRunLoopMode, NSDate.distantFuture)); end
-
-      delegate.last_result
+      @webview = WebView.alloc
+      @webview.initWithFrame(NSMakeRect(0,0,100,100))
+      @webview.setPreferencesIdentifier('Grope')
+      @delegate = FrameLoadDelegate.alloc.init
+      @webview.setFrameLoadDelegate(@delegate)
     end
 
-    def initialize(webview)
-      @webview = webview
+    def load(url)
+      run do
+        @delegate.should_keep_running = true
+        @webview.setMainFrameURL(url)
+        if !@webview.mainFrame.provisionalDataSource
+          raise " ... not a proper url?"
+        end
+      end
     end
 
     def eval(js)
-      wso = @webview.windowScriptObject
-      WSOWrapper.wrap(wso.evaluateWebScript("(function() { %s })()" % js))
+      run do
+        wso = @webview.windowScriptObject
+        WSOWrapper.wrap(wso.evaluateWebScript(<<JS % js))
+(function() {
+  %s
+
+  function click(e) {
+      var evt = document.createEvent('MouseEvents');
+      evt.initMouseEvent('click', true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+      e.dispatchEvent(evt);
+  }
+})()
+JS
+      end
     end
 
     def document
@@ -42,6 +48,21 @@ module Grope
     end
 
     private
+
+    def run
+      @delegate.performSelector_withObject_afterDelay('timeout:', @webview, @options[:timeout])
+
+      result = yield
+
+      run_loop = NSRunLoop.currentRunLoop
+      run_loop.runMode_beforeDate(NSDefaultRunLoopMode, Time.now)
+      while(@delegate.should_keep_running &&
+          run_loop.runMode_beforeDate(NSDefaultRunLoopMode, Time.now + 0.1)); end
+
+      result
+    ensure
+      NSObject.cancelPreviousPerformRequestsWithTarget_selector_object(@delegate, 'timeout:', @webview)
+    end
 
     def script_for_xpath
       <<JS

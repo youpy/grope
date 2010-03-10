@@ -4,7 +4,11 @@ A non-GUI library to represent browser environment using WebKit Framework + Ruby
 
 == Sypnosis
 
- env = Grope::Env.open('http://example.com')
+ require 'grope'
+
+ env = Grope::Env.new
+ env.load('http://example.com')
+
  env.document.title //=> "Example Web Page"
  env.eval('return window').location.href //=> "http://example.com/"
  env.xpath('//a')[0].href //=> "http://www.rfc-editor.org/rfc/rfc2606.txt"

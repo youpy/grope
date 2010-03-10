@@ -10,7 +10,8 @@ end
 
 js_filename = ARGV.shift
 
-env = Grope::Env.open('http://fmarcia.info/jsmin/test.html')
+env = Grope::Env.new
+env.load('http://fmarcia.info/jsmin/test.html')
 env.xpath('//textarea')[1].value = open(js_filename).read
 env.document.getElementById('go').click
 puts env.xpath('//textarea')[2].value
