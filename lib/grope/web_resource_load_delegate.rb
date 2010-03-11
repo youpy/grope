@@ -7,7 +7,7 @@ module Grope
 
       cookies = cookie_storage.cookies_for_url(request.URL.to_s)
       if cookies.size > 0
-        cookie_fields = NSHTTPCookie requestHeaderFieldsWithCookies(cookies)
+        cookie_fields = NSHTTPCookie.requestHeaderFieldsWithCookies(cookies)
         request.setAllHTTPHeaderFields(cookie_fields)
       end
 
