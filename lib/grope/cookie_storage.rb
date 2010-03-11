@@ -21,6 +21,7 @@ module Grope
     def cookies_for_url(url)
       uri = URI(url)
       cookies = {}
+      now = Time.now.to_ns.timeIntervalSince1970
 
       hash.each do |domain, paths|
         host = (domain =~ /\./ ? '.' : '') + uri.host
@@ -29,8 +30,7 @@ module Grope
             if path_for_compare(uri.path).index(path_for_compare(path)) == 0
               names.each do |name, cookie|
                 next unless cookie
-                if !cookie.expiresDate || cookie.expiresDate.timeIntervalSince1970 >
-                    Time.now.to_ns.timeIntervalSince1970
+                if !cookie.expiresDate || cookie.expiresDate.timeIntervalSince1970 > now
                   unless cookie.isSecure && uri.scheme != 'https'
                     cookies[name] ||= {}
                     cookies[name][path] = cookie
