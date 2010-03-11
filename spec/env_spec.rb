@@ -59,4 +59,16 @@ describe Grope::Env do
 
     (Time.now.to_i - now).should be_close(3, 1)
   end
+
+  it "should use cookie when cookie option is disabled" do
+    env = Grope::Env.new(:use_cookie => false)
+    env.load('http://google.com/')
+    env.document.cookie.should eql('')
+  end
+
+  it "should use cookie when cookie option is enabled" do
+    env = Grope::Env.new(:use_cookie => true)
+    env.load('http://google.com/')
+    env.document.cookie.should_not eql('')
+  end
 end
