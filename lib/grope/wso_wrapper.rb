@@ -45,6 +45,7 @@ module Grope
     end
 
     def method_missing(name, *args)
+      args = unwrap_arguments(args)
       result = nil
 
       begin
@@ -62,6 +63,14 @@ module Grope
         self.class.wrap(result.callWebScriptMethod_withArguments(:call, [@wso] + args))
       else
         self.class.wrap(result)
+      end
+    end
+
+    private
+
+    def unwrap_arguments(args)
+      args.map do |arg|
+        self.class === arg ? arg.wso : arg
       end
     end
   end
