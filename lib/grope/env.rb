@@ -14,7 +14,6 @@ module Grope
 
     def load(url)
       run do
-        @delegate.should_keep_running = true
         @webview.setMainFrameURL(url)
         if !@webview.mainFrame.provisionalDataSource
           raise " ... not a proper url?"
