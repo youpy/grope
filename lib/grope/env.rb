@@ -3,6 +3,7 @@ module Grope
     def initialize(options = {})
       @options = {
         :timeout => 60,
+        :use_shared_cookie => false,
       }.merge(options)
 
       @webview = WebView.alloc
@@ -10,9 +11,12 @@ module Grope
       @webview.setPreferencesIdentifier('Grope')
       @frame_load_delegate = FrameLoadDelegate.alloc.init
       @webview.setFrameLoadDelegate(@frame_load_delegate)
-      @resource_load_delegate = WebResourceLoadDelegate.alloc.init
-      @resource_load_delegate.cookie_storage = CookieStorage.new
-      @webview.setResourceLoadDelegate(@resource_load_delegate)
+
+      unless @options[:use_shared_cookie]
+        @resource_load_delegate = WebResourceLoadDelegate.alloc.init
+        @resource_load_delegate.cookie_storage = CookieStorage.new
+        @webview.setResourceLoadDelegate(@resource_load_delegate)
+      end
     end
 
     def load(url)
