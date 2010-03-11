@@ -23,20 +23,31 @@ module Grope
     end
 
     def eval(js)
+      value = nil
       run do
         wso = @webview.windowScriptObject
-        WSOWrapper.wrap(wso.evaluateWebScript(<<JS % js))
+        value = WSOWrapper.wrap(wso.evaluateWebScript(<<JS % js))
 (function() {
-  %s
+  var Grope = {
+    click: function(e) { this._dispatchMouseEvent(e, 'click') },
+    mouseover: function(e) { this._dispatchMouseEvent(e, 'mouseover') },
+    mouseout: function(e) { this._dispatchMouseEvent(e, 'mouseout') },
+    mousedown: function(e) { this._dispatchMouseEvent(e, 'mousedown') },
+    mouseup: function(e) { this._dispatchMouseEvent(e, 'mouseup') },
 
-  function click(e) {
+    _dispatchMouseEvent: function(e, type) {
       var evt = document.createEvent('MouseEvents');
-      evt.initMouseEvent('click', true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+      evt.initMouseEvent(type, true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
       e.dispatchEvent(evt);
+    },
   }
+
+  %s
 })()
 JS
       end
+      wait
+      value
     end
 
     def wait(sec = 0)
