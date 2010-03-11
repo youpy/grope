@@ -31,7 +31,13 @@ describe Grope::Env do
   end
 
   it "should redirect by click" do
-    @env.eval('click(document.getElementsByTagName("a")[0])')
+    anchor = @env.document.links[0]
+    js = @env.eval('return Grope;')
+    js.click(anchor)
+
+    # TODO: wait automatically after js function is called
+    @env.wait
+
     @env.document.URL.should eql('http://www.rfc-editor.org/rfc/rfc2606.txt')
   end
 
