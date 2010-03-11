@@ -8,8 +8,11 @@ module Grope
       @webview = WebView.alloc
       @webview.initWithFrame(NSMakeRect(0,0,100,100))
       @webview.setPreferencesIdentifier('Grope')
-      @delegate = FrameLoadDelegate.alloc.init
-      @webview.setFrameLoadDelegate(@delegate)
+      @frame_load_delegate = FrameLoadDelegate.alloc.init
+      @webview.setFrameLoadDelegate(@frame_load_delegate)
+      @resource_load_delegate = WebResourceLoadDelegate.alloc.init
+      @resource_load_delegate.cookie_storage = CookieStorage.new
+      @webview.setResourceLoadDelegate(@resource_load_delegate)
     end
 
     def load(url)
@@ -68,19 +71,19 @@ JS
     private
 
     def run(wait_sec = 0)
-      @delegate.performSelector_withObject_afterDelay('timeout:', @webview, @options[:timeout])
+      @frame_load_delegate.performSelector_withObject_afterDelay('timeout:', @webview, @options[:timeout])
 
       result = yield
 
       run_loop = NSRunLoop.currentRunLoop
       run_loop.runMode_beforeDate(NSDefaultRunLoopMode, Time.now)
-      while(@delegate.should_keep_running &&
+      while(@frame_load_delegate.should_keep_running &&
           run_loop.runMode_beforeDate(NSDefaultRunLoopMode, Time.now + 0.1)); end
       run_loop.runMode_beforeDate(NSDefaultRunLoopMode, Time.now + wait_sec)
 
       result
     ensure
-      NSObject.cancelPreviousPerformRequestsWithTarget_selector_object(@delegate, 'timeout:', @webview)
+      NSObject.cancelPreviousPerformRequestsWithTarget_selector_object(@frame_load_delegate, 'timeout:', @webview)
     end
 
     def script_for_xpath
