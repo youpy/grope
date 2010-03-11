@@ -11,7 +11,7 @@ module Grope
 
       cookies = cookie_storage.cookies_for_url(request.URL.to_s)
       if cookies.size > 0
-        warn 'send cookie for %s' % request.URL.to_s
+        warn '*** send cookie for %s, %s' % [request.URL.to_s, cookies]
         cookie_fields = NSHTTPCookie.requestHeaderFieldsWithCookies(cookies)
         request.setAllHTTPHeaderFields(cookie_fields)
       end
@@ -30,7 +30,7 @@ module Grope
       url = response.URL
 
       NSHTTPCookie.cookiesWithResponseHeaderFields_forURL(headers, url).each do |cookie|
-        warn 'store cookie for %s' % response.URL.to_s
+        warn '*** store cookie for %s, %s' % [response.URL.to_s, cookie]
         cookie_storage.set_cookie(cookie)
       end
     end
