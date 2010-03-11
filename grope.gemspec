@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["youpy"]
-  s.date = %q{2010-03-10}
+  s.date = %q{2010-03-11}
   s.description = %q{A non-GUI library to represent browser environment using WebKit Framework}
   s.email = %q{youpy@buycheapviagraonlinenow.com}
   s.extra_rdoc_files = [
@@ -24,15 +24,17 @@ Gem::Specification.new do |s|
      "Rakefile",
      "VERSION",
      "examples/js_minifier.rb",
+     "examples/patterns.rb",
      "grope.gemspec",
      "lib/grope.rb",
-     "lib/grope/dom_node_list.rb",
+     "lib/grope/dom_ext.rb",
      "lib/grope/env.rb",
      "lib/grope/frame_load_delegate.rb",
      "lib/grope/wso_wrapper.rb",
      "spec/env_spec.rb",
      "spec/spec.opts",
-     "spec/spec_helper.rb"
+     "spec/spec_helper.rb",
+     "spec/wso_wrapper.rb"
   ]
   s.homepage = %q{http://github.com/youpy/grope}
   s.rdoc_options = ["--charset=UTF-8"]
@@ -42,7 +44,10 @@ Gem::Specification.new do |s|
   s.test_files = [
     "spec/env_spec.rb",
      "spec/spec_helper.rb",
-     "examples/js_minifier.rb"
+     "spec/wso_wrapper.rb",
+     "examples/js_minifier.rb",
+     "examples/md5.rb",
+     "examples/patterns.rb"
   ]
 
   if s.respond_to? :specification_version then
