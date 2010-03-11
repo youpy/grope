@@ -60,7 +60,14 @@ describe Grope::Env do
     (Time.now.to_i - now).should be_close(3, 1)
   end
 
-  it "should use cookie" do
-    pending
+  it "should use shared cookie storage if 'use_shared_cookie' option is true" do
+    env = Grope::Env.new(:use_shared_cookie => true)
+    env.instance_eval { @resource_load_delegate }.should be_nil
+  end
+
+  it "should use own cookie storage if 'use_shared_cookie' option is false" do
+    @env.instance_eval { @resource_load_delegate }.should_not be_nil
+    @env.load('http://google.com/')
+    @env.instance_eval { @resource_load_delegate }.cookie_storage.hash['.google.com'].should_not be_nil
   end
 end
