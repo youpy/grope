@@ -58,6 +58,10 @@ JS
       eval('return document;')
     end
 
+    def window
+      eval('return window;')
+    end
+
     def xpath(xpath)
       eval(script_for_xpath % xpath.gsub(/"/, '\"'))
     end

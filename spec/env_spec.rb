@@ -22,7 +22,7 @@ describe Grope::Env do
   end
 
   it "should eval" do
-    @env.eval('return window').location.href.should eql('http://example.com/')
+    @env.window.location.href.should eql('http://example.com/')
   end
 
   it "should redirect" do
