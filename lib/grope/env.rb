@@ -76,7 +76,7 @@ JS
       run_loop.runMode_beforeDate(NSDefaultRunLoopMode, Time.now)
       while(@delegate.should_keep_running &&
           run_loop.runMode_beforeDate(NSDefaultRunLoopMode, Time.now + 0.1)); end
-      run_loop.runMode_beforeDate(NSDefaultRunLoopMode, Time.now + wait_sec)
+      run_loop.runUntilDate(Time.now + wait_sec)
 
       result
     ensure
