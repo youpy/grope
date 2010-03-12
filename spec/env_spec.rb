@@ -68,6 +68,6 @@ describe Grope::Env do
   it "should use own cookie storage if 'use_shared_cookie' option is false" do
     @env.instance_eval { @resource_load_delegate }.should_not be_nil
     @env.load('http://google.com/')
-    @env.instance_eval { @resource_load_delegate }.cookie_storage.hash['.google.com'].should_not be_nil
+    @env.instance_eval { @resource_load_delegate }.cookie_storage.cookies(URI('http://google.com/')).should_not be_nil
   end
 end
