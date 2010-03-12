@@ -34,7 +34,7 @@ module Grope
 
         data.each do |line|
           line.chomp!
-          next if line =~ /^[\s|\/]/
+          next if line =~ /^(\s*$|\/)/
 
           case line
           when /^\*/
