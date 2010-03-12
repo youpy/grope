@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["youpy"]
-  s.date = %q{2010-03-11}
+  s.date = %q{2010-03-12}
   s.description = %q{A non-GUI library to represent browser environment using WebKit Framework}
   s.email = %q{youpy@buycheapviagraonlinenow.com}
   s.extra_rdoc_files = [
@@ -23,14 +23,21 @@ Gem::Specification.new do |s|
      "README.rdoc",
      "Rakefile",
      "VERSION",
+     "data/effective_tld_names.dat",
      "examples/js_minifier.rb",
+     "examples/md5.rb",
      "examples/patterns.rb",
      "grope.gemspec",
      "lib/grope.rb",
+     "lib/grope/cookie_storage.rb",
      "lib/grope/dom_ext.rb",
+     "lib/grope/effective_tld_names.rb",
      "lib/grope/env.rb",
      "lib/grope/frame_load_delegate.rb",
+     "lib/grope/web_resource_load_delegate.rb",
      "lib/grope/wso_wrapper.rb",
+     "spec/cookie_storage_spec.rb",
+     "spec/effective_tld_names_spec.rb",
      "spec/env_spec.rb",
      "spec/spec.opts",
      "spec/spec_helper.rb",
@@ -42,7 +49,9 @@ Gem::Specification.new do |s|
   s.rubygems_version = %q{1.3.6}
   s.summary = %q{A non-GUI library to represent browser environment}
   s.test_files = [
-    "spec/env_spec.rb",
+    "spec/cookie_storage_spec.rb",
+     "spec/effective_tld_names_spec.rb",
+     "spec/env_spec.rb",
      "spec/spec_helper.rb",
      "spec/wso_wrapper.rb",
      "examples/js_minifier.rb",
