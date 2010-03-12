@@ -5,15 +5,17 @@ module Grope
     def webView_resource_willSendRequest_redirectResponse_fromDataSource(webview, resource, request, redirect_response, data_source)
       request.setHTTPShouldHandleCookies(false)
 
-      if redirect_response
-        set_cookies(redirect_response)
-      end
+      if request.URL.to_s =~ /^http/
+        if redirect_response
+          set_cookies(redirect_response)
+        end
 
-      cookies = cookie_storage.cookies_for_url(request.URL.to_s)
-      if cookies.size > 0
-        warn "*** send cookie for %s ***\n%s" % [request.URL.to_s, cookies]
-        cookie_fields = NSHTTPCookie.requestHeaderFieldsWithCookies(cookies)
-        request.setAllHTTPHeaderFields(cookie_fields)
+        cookies = cookie_storage.cookies_for_url(request.URL.to_s)
+        if cookies.size > 0
+          warn "*** send cookie for %s ***\n%s" % [request.URL.to_s, cookies]
+          cookie_fields = NSHTTPCookie.requestHeaderFieldsWithCookies(cookies)
+          request.setAllHTTPHeaderFields(cookie_fields)
+        end
       end
 
       request
