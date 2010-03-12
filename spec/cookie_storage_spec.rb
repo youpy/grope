@@ -18,19 +18,27 @@ describe Grope::CookieStorage do
       @storage.hash['.google.com']['/']['foo'].should eql(@cookie)
 
       @cookie.name = 'bar'
-      @storage.set_cookie(@cookie)
+      @storage.set_cookie(@cookie).should_not be_nil
 
       @storage.hash['.google.com']['/']['bar'].should eql(@cookie)
 
       @cookie.path = '/foo/bar'
-      @storage.set_cookie(@cookie)
+      @storage.set_cookie(@cookie).should_not be_nil
 
       @storage.hash['.google.com']['/foo/bar']['bar'].should eql(@cookie)
 
       @cookie.domain = '.twitter.com'
-      @storage.set_cookie(@cookie)
+      @storage.set_cookie(@cookie).should_not be_nil
 
       @storage.hash['.twitter.com']['/foo/bar']['bar'].should eql(@cookie)
+    end
+
+    it "should not set cookie which have a domain with too few dots" do
+      %w/.com com co.jp .co.jp jp .jp/.each do |domain|
+        @cookie.domain = domain
+        @storage.set_cookie(@cookie).should be_nil
+        @storage.hash[domain].should be_nil
+      end
     end
   end
 
@@ -56,6 +64,14 @@ describe Grope::CookieStorage do
 
       @storage.cookies_for_url('http://google.com/').should eql([])
       @storage.cookies_for_url('https://google.com/').should eql([@cookie])
+    end
+
+    it "should get without dot at the beginning" do
+      @cookie.domain = 'google.com'
+      @storage.set_cookie(@cookie)
+
+      @storage.cookies_for_url('http://www.google.com/').should eql([])
+      @storage.cookies_for_url('http://google.com/').should eql([@cookie])
     end
 
     it "should not get with wrong path" do

@@ -13,9 +13,13 @@ module Grope
       path = cookie.path.to_s
       name = cookie.name.to_s
 
-      hash[domain] ||= {}
-      hash[domain][path] ||= {}
-      hash[domain][path][name] = cookie
+      if domain =~ /[^\.]+\.((com|edu|net|org|gov|mil|int)|[^\.]+\.[^\.]+)$/
+        hash[domain] ||= {}
+        hash[domain][path] ||= {}
+        hash[domain][path][name] = cookie
+      else
+        nil
+      end
     end
 
     def cookies_for_url(url)
@@ -24,10 +28,9 @@ module Grope
       now = Time.now.to_ns.timeIntervalSince1970
 
       hash.each do |domain, paths|
-        host = (domain =~ /\./ ? '.' : '') + uri.host
-        if host.rindex(domain) == (host.size - domain.size)
+        if check_domain(uri.host, domain)
           paths.each do |path, names|
-            if path_for_compare(uri.path).index(path_for_compare(path)) == 0
+            if check_path(uri.path, path)
               names.each do |name, cookie|
                 next unless cookie
                 if !cookie.expiresDate || cookie.expiresDate.timeIntervalSince1970 > now
@@ -65,6 +68,16 @@ module Grope
     end
 
     private
+
+    def check_domain(domain, cookie_domain)
+      domain = (cookie_domain =~ /^\./ ? '.' : '') + domain
+      (cookie_domain =~ /^\./) ? domain.rindex(cookie_domain) == (domain.size - cookie_domain.size) :
+        domain == cookie_domain
+    end
+
+    def check_path(path, cookie_path)
+      path_for_compare(path).index(path_for_compare(cookie_path)) == 0
+    end
 
     def path_for_compare(path)
       if path != '/'
