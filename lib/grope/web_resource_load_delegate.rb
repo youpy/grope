@@ -26,6 +26,8 @@ module Grope
     private
 
     def set_cookies(response)
+      return unless response.isKindOfClass(NSHTTPURLResponse)
+
       headers = response.allHeaderFields
       url = response.URL
 
