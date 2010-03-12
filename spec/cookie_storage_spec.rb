@@ -33,6 +33,14 @@ describe Grope::CookieStorage do
       @storage.hash['.twitter.com']['/foo/bar']['bar'].should eql(@cookie)
     end
 
+    it "should set cookie which have a domain with sufficient number of dots" do
+      %w/example.com example.co.jp example.jp/.each do |domain|
+        @cookie.domain = domain
+        @storage.set_cookie(@cookie).should_not be_nil
+        @storage.hash[domain].should_not be_nil
+      end
+    end
+
     it "should not set cookie which have a domain with too few dots" do
       %w/.com com co.jp .co.jp jp .jp/.each do |domain|
         @cookie.domain = domain

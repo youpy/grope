@@ -6,6 +6,8 @@ module Grope
 
     def initialize
       @hash = {}
+      @effective_tld_names = EffectiveTldNames.parse(File.dirname(__FILE__) +
+        '/../../data/effective_tld_names.dat')
     end
 
     def set_cookie(cookie)
@@ -13,7 +15,8 @@ module Grope
       path = cookie.path.to_s
       name = cookie.name.to_s
 
-      if domain =~ /[^\.]+\.((com|edu|net|org|gov|mil|int)|[^\.]+\.[^\.]+)$/
+      if domain =~ /[^\.]+\.((com|edu|net|org|gov|mil|int)|[^\.]+\.[^\.]+)$/ ||
+          !@effective_tld_names.match(domain)
         hash[domain] ||= {}
         hash[domain][path] ||= {}
         hash[domain][path][name] = cookie
