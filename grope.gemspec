@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{grope}
-  s.version = "0.0.2"
+  s.version = "0.0.3"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["youpy"]
-  s.date = %q{2010-03-12}
+  s.date = %q{2010-03-13}
   s.description = %q{A non-GUI library to represent browser environment using WebKit Framework}
   s.email = %q{youpy@buycheapviagraonlinenow.com}
   s.extra_rdoc_files = [
@@ -23,21 +23,16 @@ Gem::Specification.new do |s|
      "README.rdoc",
      "Rakefile",
      "VERSION",
-     "data/effective_tld_names.dat",
      "examples/js_minifier.rb",
      "examples/md5.rb",
      "examples/patterns.rb",
      "grope.gemspec",
      "lib/grope.rb",
-     "lib/grope/cookie_storage.rb",
      "lib/grope/dom_ext.rb",
-     "lib/grope/effective_tld_names.rb",
      "lib/grope/env.rb",
      "lib/grope/frame_load_delegate.rb",
      "lib/grope/web_resource_load_delegate.rb",
      "lib/grope/wso_wrapper.rb",
-     "spec/cookie_storage_spec.rb",
-     "spec/effective_tld_names_spec.rb",
      "spec/env_spec.rb",
      "spec/spec.opts",
      "spec/spec_helper.rb",
@@ -49,9 +44,7 @@ Gem::Specification.new do |s|
   s.rubygems_version = %q{1.3.6}
   s.summary = %q{A non-GUI library to represent browser environment}
   s.test_files = [
-    "spec/cookie_storage_spec.rb",
-     "spec/effective_tld_names_spec.rb",
-     "spec/env_spec.rb",
+    "spec/env_spec.rb",
      "spec/spec_helper.rb",
      "spec/wso_wrapper.rb",
      "examples/js_minifier.rb",
@@ -65,11 +58,14 @@ Gem::Specification.new do |s|
 
     if Gem::Version.new(Gem::RubyGemsVersion) >= Gem::Version.new('1.2.0') then
       s.add_development_dependency(%q<rspec>, [">= 1.2.9"])
+      s.add_runtime_dependency(%q<mechanize>, [">= 0"])
     else
       s.add_dependency(%q<rspec>, [">= 1.2.9"])
+      s.add_dependency(%q<mechanize>, [">= 0"])
     end
   else
     s.add_dependency(%q<rspec>, [">= 1.2.9"])
+    s.add_dependency(%q<mechanize>, [">= 0"])
   end
 end
 
