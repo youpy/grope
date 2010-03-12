@@ -30,8 +30,9 @@ module Grope
       url = response.URL
 
       NSHTTPCookie.cookiesWithResponseHeaderFields_forURL(headers, url).each do |cookie|
-        warn "*** store cookie for %s ***\n%s" % [response.URL.to_s, cookie]
-        cookie_storage.set_cookie(cookie)
+        if cookie_storage.set_cookie(cookie)
+          warn "*** store cookie for %s ***\n%s" % [response.URL.to_s, cookie]
+        end
       end
     end
   end
