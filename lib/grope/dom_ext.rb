@@ -1,3 +1,9 @@
+class DOMNode
+  def [](name)
+    hasAttribute(name.to_s).zero? ? nil : getAttribute(name.to_s)
+  end
+end
+
 [
   DOMNodeList,
   DOMHTMLOptionsCollection,
