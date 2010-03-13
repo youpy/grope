@@ -11,9 +11,9 @@ describe Grope::Env do
   end
 
   it "should get elements by XPath" do
-    result = @env.xpath('//a')
-    result.size.should eql(1)
-    result[0].href.should eql('http://www.rfc-editor.org/rfc/rfc2606.txt')
+    body = @env.find('//body')
+    @env.find('//a', body).href.should eql('http://www.rfc-editor.org/rfc/rfc2606.txt')
+    @env.all('//a', body)[0].href.should eql('http://www.rfc-editor.org/rfc/rfc2606.txt')
   end
 
   it "should get links" do

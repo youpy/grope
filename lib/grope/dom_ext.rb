@@ -1,12 +1,12 @@
-class DOMNodeList
-  def [](index)
-    item(index)
-  end
-end
-
-class DOMHTMLCollection
-  def [](index)
-    item(index)
+[
+  DOMNodeList,
+  DOMHTMLOptionsCollection,
+  DOMHTMLCollection
+].each do |klass|
+  klass.class_eval do
+    def [](index)
+      item(index)
+    end
   end
 end
 

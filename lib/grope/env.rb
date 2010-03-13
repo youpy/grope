@@ -42,13 +42,51 @@ module Grope
     mouseout: function(e) { this._dispatchMouseEvent(e, 'mouseout') },
     mousedown: function(e) { this._dispatchMouseEvent(e, 'mousedown') },
     mouseup: function(e) { this._dispatchMouseEvent(e, 'mouseup') },
+    xpath: function(exp, context, type /* want type */) {
+      if (typeof context == "function") {
+        type = context;
+        context = null;
+      }
+      if (!context) context = document;
+      exp = (context.ownerDocument || context).createExpression(exp, function (prefix) {
+        var o = document.createNSResolver(context)(prefix);
+        if (o) return o;
+        return (document.contentType == "application/xhtml+xml") ? "http://www.w3.org/1999/xhtml" : "";
+      });
+
+      switch (type) {
+      case String: return exp.evaluate(context, XPathResult.STRING_TYPE, null).stringValue;
+      case Number: return exp.evaluate(context, XPathResult.NUMBER_TYPE, null).numberValue;
+      case Boolean: return exp.evaluate(context, XPathResult.BOOLEAN_TYPE, null).booleanValue;
+      case Array:
+        var result = exp.evaluate(context, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
+        for (var ret = [], i = 0, len = result.snapshotLength; i < len; i++) {
+          ret.push(result.snapshotItem(i));
+        }
+        return ret;
+      case undefined:
+        var result = exp.evaluate(context, XPathResult.ANY_TYPE, null);
+        switch (result.resultType) {
+        case XPathResult.STRING_TYPE : return result.stringValue;
+        case XPathResult.NUMBER_TYPE : return result.numberValue;
+        case XPathResult.BOOLEAN_TYPE: return result.booleanValue;
+        case XPathResult.UNORDERED_NODE_ITERATOR_TYPE:
+          // not ensure the order.
+          var ret = [], i = null;
+          while ((i = result.iterateNext())) ret.push(i);
+          return ret;
+        }
+        return null;
+      default: throw(TypeError("$X: specified type is not valid type."));
+      }
+    },
 
     _dispatchMouseEvent: function(e, type) {
       var evt = document.createEvent('MouseEvents');
       evt.initMouseEvent(type, true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
       e.dispatchEvent(evt);
-    },
-  }
+    }
+  };
 
   %s
 })()
@@ -70,8 +108,14 @@ JS
       eval('return window;')
     end
 
-    def xpath(xpath)
-      eval(script_for_xpath % xpath.gsub(/"/, '\"'))
+    def all(xpath, node = nil)
+      node ||= document
+      js = eval('return Grope')
+      js.xpath(xpath, document)
+    end
+
+    def find(xpath, node = nil)
+      all(xpath, node)[0]
     end
 
     private
@@ -90,49 +134,6 @@ JS
       result
     ensure
       NSObject.cancelPreviousPerformRequestsWithTarget_selector_object(@frame_load_delegate, 'timeout:', @webview)
-    end
-
-    def script_for_xpath
-      <<JS
-return (function(exp, context, type /* want type */) {
-  if (typeof context == "function") {
-    type = context;
-    context = null;
-  }
-  if (!context) context = document;
-  exp = (context.ownerDocument || context).createExpression(exp, function (prefix) {
-    var o = document.createNSResolver(context)(prefix);
-    if (o) return o;
-    return (document.contentType == "application/xhtml+xml") ? "http://www.w3.org/1999/xhtml" : "";
-  });
-  
-  switch (type) {
-  case String: return exp.evaluate(context, XPathResult.STRING_TYPE, null).stringValue;
-  case Number: return exp.evaluate(context, XPathResult.NUMBER_TYPE, null).numberValue;
-  case Boolean: return exp.evaluate(context, XPathResult.BOOLEAN_TYPE, null).booleanValue;
-  case Array:
-    var result = exp.evaluate(context, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
-    for (var ret = [], i = 0, len = result.snapshotLength; i < len; i++) {
-      ret.push(result.snapshotItem(i));
-    }
-    return ret;
-  case undefined:
-    var result = exp.evaluate(context, XPathResult.ANY_TYPE, null);
-    switch (result.resultType) {
-    case XPathResult.STRING_TYPE : return result.stringValue;
-    case XPathResult.NUMBER_TYPE : return result.numberValue;
-    case XPathResult.BOOLEAN_TYPE: return result.booleanValue;
-    case XPathResult.UNORDERED_NODE_ITERATOR_TYPE:
-      // not ensure the order.
-      var ret = [], i = null;
-      while ((i = result.iterateNext())) ret.push(i);
-      return ret;
-    }
-    return null;
-  default: throw(TypeError("$X: specified type is not valid type."));
-  }
-})("%s");
-JS
     end
   end
 end
