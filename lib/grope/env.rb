@@ -111,7 +111,7 @@ JS
     def all(xpath, node = nil)
       node ||= document
       js = eval('return Grope')
-      js.xpath(xpath, document)
+      js.xpath(xpath, node)
     end
 
     def find(xpath, node = nil)
