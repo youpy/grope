@@ -25,6 +25,7 @@ Gem::Specification.new do |s|
      "README.rdoc",
      "Rakefile",
      "VERSION",
+     "bin/grope",
      "examples/js_minifier.rb",
      "examples/md5.rb",
      "examples/patterns.rb",
