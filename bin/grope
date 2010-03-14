@@ -1,0 +1,34 @@
+#!/usr/bin/env ruby
+require 'rubygems'
+require 'optparse'
+require 'irb'
+require 'grope'
+
+opts = OptionParser.new do |opts|
+  opts.banner = "Grope: A non-GUI library to represent browser environment using WebKit Framework + RubyCocoa"
+  opts.define_head "Usage: #{$0} uri [options]"
+  opts.separator ""
+  opts.separator "Example:"
+  opts.separator "  grope http://www.ruby-lang.org/"
+  opts.separator ""
+  opts.separator "Options:"
+
+  opts.on_tail("-?", "--help", "Show this message") do
+    puts opts
+    exit
+  end
+end
+opts.parse!
+
+uri = ARGV.shift
+
+if uri.to_s.strip.empty?
+  puts opts
+  exit 1
+end
+
+@env = Grope::Env.new
+@env.load(uri)
+
+puts "Your environment is stored in @env..."
+IRB.start

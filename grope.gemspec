@@ -9,9 +9,11 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["youpy"]
-  s.date = %q{2010-03-13}
+  s.date = %q{2010-03-14}
+  s.default_executable = %q{grope}
   s.description = %q{A non-GUI library to represent browser environment using WebKit Framework}
   s.email = %q{youpy@buycheapviagraonlinenow.com}
+  s.executables = ["grope"]
   s.extra_rdoc_files = [
     "LICENSE",
      "README.rdoc"
