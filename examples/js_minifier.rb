@@ -12,6 +12,6 @@ js_filename = ARGV.shift
 
 env = Grope::Env.new
 env.load('http://fmarcia.info/jsmin/test.html')
-env.xpath('//textarea')[1].value = open(js_filename).read
+env.all('//textarea')[1].value = open(js_filename).read
 env.document.getElementById('go').click
-puts env.xpath('//textarea')[2].value
+puts env.all('//textarea')[2].value

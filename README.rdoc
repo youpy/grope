@@ -7,12 +7,11 @@ A non-GUI library to represent browser environment using WebKit Framework + Ruby
  require 'grope'
 
  env = Grope::Env.new
- env.load('http://example.com')
 
+ env.load('http://example.com')
  env.document.title //=> "Example Web Page"
- env.eval('return window').location.href //=> "http://example.com/"
- env.xpath('//a')[0].href //=> "http://www.rfc-editor.org/rfc/rfc2606.txt"
- env.xpath('//a')[0].offsetWidth //=> 58
+ env.find('//a').href //=> "http://www.rfc-editor.org/rfc/rfc2606.txt"
+ env.find('//a').offsetWidth //=> 58
 
  env.load('http://nonn-et-twk.net/twk/nondrupal/flip/flip.html')
  env.window.flipString('test') //=> "ʇsǝʇ"
