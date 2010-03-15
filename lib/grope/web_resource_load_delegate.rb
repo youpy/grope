@@ -79,7 +79,7 @@ class NSHTTPCookieWrapper
     cookie.isSecure == true.to_ns ? true : false
   end
 
-  def expires
+  def expired?
     cookie.expiresDate && Time.at(cookie.expiresDate.timeIntervalSince1970.to_i)
   end
 end

@@ -16,7 +16,7 @@ module Grope
 
       unless @options[:use_shared_cookie]
         @resource_load_delegate = WebResourceLoadDelegate.alloc.init
-        @resource_load_delegate.cookie_storage = WWW::Mechanize::CookieJar.new
+        @resource_load_delegate.cookie_storage = Mechanize::CookieJar.new
         @webview.setResourceLoadDelegate(@resource_load_delegate)
       end
     end

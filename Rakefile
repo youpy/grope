@@ -11,7 +11,7 @@ begin
     gem.homepage = "http://github.com/youpy/grope"
     gem.authors = ["youpy"]
     gem.add_development_dependency "rspec", ">= 1.2.9"
-    gem.add_dependency "mechanize"
+    gem.add_dependency "mechanize", ">= 1.0.0"
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
   Jeweler::GemcutterTasks.new
