@@ -1,4 +1,4 @@
-#!/usr/bin/enb ruby
+#!/usr/bin/env ruby
 
 require 'rubygems'
 require 'grope'
