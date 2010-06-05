@@ -4,6 +4,8 @@ require 'optparse'
 require 'irb'
 require 'grope'
 
+use_shared_cookie = false
+
 opts = OptionParser.new do |opts|
   opts.banner = "Grope: A non-GUI library to represent browser environment using WebKit Framework + RubyCocoa"
   opts.define_head "Usage: #{$0} uri [options]"
@@ -12,6 +14,10 @@ opts = OptionParser.new do |opts|
   opts.separator "  grope http://www.ruby-lang.org/"
   opts.separator ""
   opts.separator "Options:"
+
+  opts.on("-s", "--shared-cookie", "Use shared cookie") do
+    use_shared_cookie = true
+  end
 
   opts.on_tail("-?", "--help", "Show this message") do
     puts opts
@@ -27,7 +33,7 @@ if uri.to_s.strip.empty?
   exit 1
 end
 
-@env = Grope::Env.new
+@env = Grope::Env.new :use_shared_cookie => use_shared_cookie
 @env.load(uri)
 
 puts "Your environment is stored in @env..."
