@@ -19,7 +19,7 @@ opts = OptionParser.new do |opts|
     use_shared_cookie = true
   end
 
-  opts.on_tail("-?", "--help", "Show this message") do
+  opts.on_tail("-h", "--help", "Show this message") do
     puts opts
     exit
   end
