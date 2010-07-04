@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["youpy"]
-  s.date = %q{2010-03-15}
+  s.date = %q{2010-07-05}
   s.default_executable = %q{grope}
   s.description = %q{A non-GUI library to represent browser environment using WebKit Framework}
   s.email = %q{youpy@buycheapviagraonlinenow.com}
@@ -27,6 +27,8 @@ Gem::Specification.new do |s|
      "VERSION",
      "bin/grope",
      "examples/js_minifier.rb",
+     "examples/js_minifier_sinatra.rb",
+     "examples/map_generator.rb",
      "examples/md5.rb",
      "examples/patterns.rb",
      "grope.gemspec",
@@ -51,6 +53,8 @@ Gem::Specification.new do |s|
      "spec/spec_helper.rb",
      "spec/wso_wrapper.rb",
      "examples/js_minifier.rb",
+     "examples/js_minifier_sinatra.rb",
+     "examples/map_generator.rb",
      "examples/md5.rb",
      "examples/patterns.rb"
   ]
