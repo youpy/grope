@@ -6,11 +6,21 @@ module Grope
       @options = {
         :timeout => 60,
         :use_shared_cookie => false,
+        :init_width => 1024,
+        :init_height => 600
       }.merge(options)
 
+      NSApplication.sharedApplication
       @webview = WebView.alloc
-      @webview.initWithFrame(NSMakeRect(0,0,100,100))
+      @webview.initWithFrame(rect)
       @webview.setPreferencesIdentifier('Grope')
+      @webview.preferences.setShouldPrintBackgrounds(true)
+      @webview.preferences.setAllowsAnimatedImages(false)
+      @webview.mainFrame.frameView.setAllowsScrolling(false)
+      @webview.setMediaStyle('screen')
+
+      create_window
+
       @frame_load_delegate = FrameLoadDelegate.alloc.init
       @webview.setFrameLoadDelegate(@frame_load_delegate)
 
@@ -80,6 +90,15 @@ module Grope
       default: throw(TypeError("$X: specified type is not valid type."));
       }
     },
+    getElementPosition: function(elem) {
+      var position = elem.getBoundingClientRect();
+      return {
+        left: Math.round(window.scrollX+position.left),
+        top: Math.round(window.scrollY+position.top),
+        width: elem.clientWidth,
+        height: elem.clientHeight
+      }
+    },
 
     _dispatchMouseEvent: function(e, type) {
       var evt = document.createEvent('MouseEvents');
@@ -110,12 +129,42 @@ JS
 
     def all(xpath, node = nil)
       node ||= document
-      js = eval('return Grope')
       js.xpath(xpath, node)
     end
 
     def find(xpath, node = nil)
       all(xpath, node)[0]
+    end
+
+    def capture(elem = nil, filename = "capture.png")
+      view = @webview.mainFrame.frameView.documentView
+      bounds = view.bounds
+
+      if elem
+        position = js.getElementPosition(elem)
+
+        raise "element's width is 0" if position.width.zero?
+        raise "element's height is 0" if position.height.zero?
+
+        bounds.origin.x = position.left
+        bounds.origin.y = position.top
+        bounds.size.width = position.width
+        bounds.size.height = position.height
+      end
+
+      wait
+
+      view.display
+      view.window.setContentSize(NSUnionRect(view.bounds, bounds).size)
+      view.setFrame(NSUnionRect(view.bounds, bounds))
+
+      view.lockFocus
+      bitmapdata = NSBitmapImageRep.alloc
+      bitmapdata.initWithFocusedViewRect(bounds)
+      view.unlockFocus
+
+      bitmapdata.representationUsingType_properties(NSPNGFileType, nil).
+        writeToFile_atomically(filename.to_s, 1)
     end
 
     private
@@ -134,6 +183,21 @@ JS
       result
     ensure
       NSObject.cancelPreviousPerformRequestsWithTarget_selector_object(@frame_load_delegate, 'timeout:', @webview)
+    end
+
+    def js
+      eval('return Grope')
+    end
+
+    def create_window
+      unless @window
+        @window = NSWindow.alloc.initWithContentRect_styleMask_backing_defer_(rect, NSBorderlessWindowMask, 2, false)
+        @window.setContentView(@webview)
+      end
+    end
+
+    def rect
+      NSMakeRect(0,0,@options[:init_width],@options[:init_height])
     end
   end
 end

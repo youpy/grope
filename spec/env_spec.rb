@@ -1,7 +1,10 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
+require 'pathname'
+require 'shellwords'
+
 describe Grope::Env do
-  before do
+  before(:all) do
     @env = Grope::Env.new
     @env.load('http://example.com')
   end
@@ -69,5 +72,54 @@ describe Grope::Env do
     @env.instance_eval { @resource_load_delegate }.should_not be_nil
     @env.load('http://google.com/')
     @env.instance_eval { @resource_load_delegate }.cookie_storage.cookies(URI('http://google.com/')).should_not be_nil
+  end
+
+  describe "#capture" do
+    before do
+      dir = Pathname(Dir.tmpdir)
+      @filename = dir + 'test.png'
+    end
+
+    after do
+      if @filename.file?
+        @filename.unlink
+      end
+    end
+
+    it "should capture specified element and write to file as png" do
+      pending "it causes segmentation fault"
+      element = @env.find('//p')
+
+      @env.capture(element, @filename)
+
+      info = `file #{Shellwords.shellescape(@filename.to_s)}`
+
+      info.should match(/PNG image/)
+
+      width, height = info.scan(/(\d+) x (\d+)/)[0]
+
+      width.to_i.should eql(element.clientWidth)
+      height.to_i.should eql(element.clientHeight)
+    end
+
+    it "should capture whole content" do
+      @env.capture(nil, @filename)
+
+      info = `file #{Shellwords.shellescape(@filename.to_s)}`
+
+      info.should match(/PNG image/)
+
+      width, height = info.scan(/(\d+) x (\d+)/)[0]
+
+      width.to_i.should eql(1024)
+      height.to_i.should eql(600)
+    end
+
+    it "should raise error if width(or height) of specified element is zero" do
+      lambda {
+        element = @env.find('//a')
+        @env.capture(element, @filename)
+      }.should raise_error(RuntimeError)
+    end
   end
 end
