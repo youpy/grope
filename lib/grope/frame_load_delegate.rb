@@ -16,7 +16,9 @@ module Grope
     end
 
     def webView_didFinishLoadForFrame(webview, frame)
-      terminate
+      if frame == webview.mainFrame
+        terminate
+      end
     end
 
     def terminate

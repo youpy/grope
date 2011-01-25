@@ -176,7 +176,7 @@ JS
 
       run_loop = NSRunLoop.currentRunLoop
       run_loop.runMode_beforeDate(NSDefaultRunLoopMode, Time.now)
-      while(@frame_load_delegate.should_keep_running &&
+      while(@webview.isLoading? && @frame_load_delegate.should_keep_running &&
           run_loop.runMode_beforeDate(NSDefaultRunLoopMode, Time.now + 0.1)); end
       run_loop.runUntilDate(Time.now + wait_sec)
 
