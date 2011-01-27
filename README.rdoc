@@ -20,7 +20,7 @@ A non-GUI library to represent browser environment using WebKit Framework + Ruby
  env.load('http://nonn-et-twk.net/twk/nondrupal/flip/flip.html')
  env.window.flipString('test') //=> "ʇsǝʇ"
 
-== Capture screenshot
+=== Capture screenshot
  # capture whole page and save to 'capture.png'
  @env.capture
 
