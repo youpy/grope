@@ -18,9 +18,9 @@ module Grope
       when Integer
         value
       when OSX::NSCFBoolean
-        value
+        value.boolValue
       when OSX::NSCFNumber
-        value.to_i
+        value.integer? ? value.to_i : value.to_f
       when OSX::NSCFString
         value.to_s
       else

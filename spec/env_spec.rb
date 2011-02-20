@@ -4,33 +4,43 @@ require 'pathname'
 require 'shellwords'
 
 describe Grope::Env do
-  before(:all) do
+  before do
     @env = Grope::Env.new
-    @env.load('http://example.com')
+    @env.load('http://httpstat.us/')
+    sleep 1
   end
 
   it "should initialize" do
-    @env.document.title.should eql('Example Web Page')
+    @env.document.title.should eql('httpstat.us')
   end
 
   it "should get elements by XPath" do
     body = @env.find('//body')
-    @env.find('//a', body).href.should eql('http://www.rfc-editor.org/rfc/rfc2606.txt')
-    @env.all('//a', body)[0].href.should eql('http://www.rfc-editor.org/rfc/rfc2606.txt')
+    @env.find('//a', body).href.should eql('http://httpstat.us/200')
+    @env.all('//a', body)[0].href.should eql('http://httpstat.us/200')
   end
 
   it "should get links" do
     result = @env.document.links
-    result[0].href.should eql('http://www.rfc-editor.org/rfc/rfc2606.txt')
+    result[0].href.should eql('http://httpstat.us/200')
   end
 
   it "should eval" do
-    @env.window.location.href.should eql('http://example.com/')
+    @env.window.location.href.should eql('http://httpstat.us/')
   end
 
-  it "should redirect" do
-    @env.eval('location.href="http://example.org"')
-    @env.document.location.href.should eql('http://example.org/')
+  it "should redirect by javascript" do
+    @env.eval('location.href="http://httpstat.us/200"')
+    @env.wait
+
+    @env.document.URL.should eql('http://httpstat.us/200')
+  end
+
+  it "should redirect by status code" do
+    @env.load('http://httpstat.us/302')
+    @env.wait
+
+    @env.document.URL.should eql('http://httpstat.us/')
   end
 
   it "should redirect by click" do
@@ -41,13 +51,13 @@ describe Grope::Env do
     # TODO: wait automatically after js function is called
     @env.wait
 
-    @env.document.URL.should eql('http://www.rfc-editor.org/rfc/rfc2606.txt')
+    @env.document.URL.should eql('http://httpstat.us/200')
   end
 
   it "should get/call function" do
     function = @env.eval('return function(x, y) { return x * y }')
-    function.call(false, 3, 5).should eql(15)
-    function.apply(false, [3, 5]).should eql(15)
+    function.call(false, 3, 5).should eql(15.0)
+    function.apply(false, [3, 1.5]).should eql(4.5)
   end
 
   it "should call function in object" do
@@ -87,7 +97,7 @@ describe Grope::Env do
     end
 
     it "should capture specified element and write to file as png" do
-      pending "it causes segmentation fault"
+
       element = @env.find('//p')
 
       @env.capture(element, @filename)
@@ -103,6 +113,7 @@ describe Grope::Env do
     end
 
     it "should capture whole content" do
+      @env.load('http://httpstat.us/200')
       @env.capture(nil, @filename)
 
       info = `file #{Shellwords.shellescape(@filename.to_s)}`
