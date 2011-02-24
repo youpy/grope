@@ -100,9 +100,11 @@ module Grope
       }
     },
 
-    _dispatchMouseEvent: function(e, type) {
+    _dispatchMouseEvent: function(e, type, dst) {
       var evt = document.createEvent('MouseEvents');
-      evt.initMouseEvent(type, true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+      dst = dst || e;
+      var pos = dst.getBoundingClientRect();
+      evt.initMouseEvent(type, true, true, window, 0, 0, 0, Math.round(pos.left), Math.round(pos.top), false, false, false, false, 0, null);
       e.dispatchEvent(evt);
     }
   };
