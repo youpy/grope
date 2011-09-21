@@ -10,6 +10,10 @@ module Grope
     attr_reader :wso
 
     def self.wrap(value)
+      if value.respond_to?(:bool?) && value.bool?
+        return value.boolValue
+      end
+
       case value
       when nil
         nil
@@ -19,8 +23,12 @@ module Grope
         value
       when OSX::NSCFBoolean
         value.boolValue
+      when OSX::NSNumber
+        value.integer? ? value.to_i : value.to_f
       when OSX::NSCFNumber
         value.integer? ? value.to_i : value.to_f
+      when OSX::NSMutableString
+        value.to_s
       when OSX::NSCFString
         value.to_s
       else
@@ -74,4 +82,7 @@ module Grope
       end
     end
   end
+end
+
+class OSX::NSCFString
 end
