@@ -60,7 +60,7 @@ class NSHTTPCookieWrapper
   end
 
   def domain
-    cookie.domain && cookie.domain.to_s.sub(/^\./, '')
+    cookie.domain && cookie.domain.to_s
   end
 
   def path
