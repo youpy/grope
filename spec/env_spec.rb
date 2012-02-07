@@ -70,7 +70,27 @@ describe Grope::Env do
 
     @env.wait(3)
 
-    (Time.now.to_i - now).should be_close(3, 1)
+    (Time.now.to_i - now).should be_within(1).of(3)
+  end
+
+  it "should wait until given block returns true" do
+    now = Time.now.to_i
+
+    lambda {
+      @env.wait_until(:timeout => 1) do |env|
+        env.document.title == 'xxx'
+      end
+    }.should raise_error(Timeout::Error)
+
+    (Time.now.to_i - now).should be_within(1).of(1)
+
+    @env.document.querySelector('title').innerHTML = 'xxx'
+
+    result = @env.wait_until do |env|
+      env.document.title == 'xxx'
+    end
+
+    result.should be_true
   end
 
   it "should use shared cookie storage if 'use_shared_cookie' option is true" do

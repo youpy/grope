@@ -121,6 +121,26 @@ JS
       run(sec) do; end
     end
 
+    def wait_until(options = {})
+      options = {
+        :timeout => 10
+      }.merge(options)
+
+      start = Time.now.to_i
+
+      begin
+        result = yield self
+
+        if result
+          return result
+        end
+
+        wait(1)
+      end until Time.now.to_i >= start + options[:timeout]
+
+      raise TimeoutError
+    end
+
     def document
       eval('return document;')
     end
