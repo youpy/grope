@@ -46,14 +46,19 @@ describe Grope::Env do
   it "should not load invalid URL" do
     %w|
 htp://example.com/
-http:/example.com/
 example.com
 example
 |.each do |invalid_url|
       lambda {
-        Grope::Env.new(invalid_url)
+        Grope::Env.new.load(invalid_url)
       }.should raise_error
     end
+  end
+
+  it "should load about: URL" do
+    lambda {
+      Grope::Env.new.load('about:blank')
+    }.should_not raise_error
   end
 
   it "should redirect by click" do

@@ -34,7 +34,7 @@ module Grope
     def load(url)
       run do
         @webview.setMainFrameURL(url)
-        if !@webview.mainFrame.provisionalDataSource
+        if !@webview.mainFrame.provisionalDataSource && url !~ /^about:/
           raise " ... not a proper url?"
         end
       end
