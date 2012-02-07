@@ -43,6 +43,19 @@ describe Grope::Env do
     @env.document.URL.should eql('http://httpstat.us/')
   end
 
+  it "should not load invalid URL" do
+    %w|
+htp://example.com/
+http:/example.com/
+example.com
+example
+|.each do |invalid_url|
+      lambda {
+        Grope::Env.new(invalid_url)
+      }.should raise_error
+    end
+  end
+
   it "should redirect by click" do
     anchor = @env.document.links[0]
     js = @env.eval('return Grope;')

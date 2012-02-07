@@ -21,3 +21,8 @@ pkg
 ## PROJECT::SPECIFIC
 
 .rbenv-version
+
+# bundler
+
+.bundle
+vendor/bundle
