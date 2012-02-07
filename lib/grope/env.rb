@@ -212,10 +212,8 @@ JS
     end
 
     def create_window
-      unless @window
-        @window = NSWindow.alloc.initWithContentRect_styleMask_backing_defer_(rect, NSBorderlessWindowMask, 2, false)
-        @window.setContentView(@webview)
-      end
+      @window = NSWindow.alloc.initWithContentRect_styleMask_backing_defer_(rect, NSBorderlessWindowMask, 2, false)
+      @window.setContentView(@webview)
     end
 
     def rect
