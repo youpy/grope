@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{grope}
-  s.version = "0.1.1"
+  s.version = "0.2.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["youpy"]
-  s.date = %q{2011-02-20}
+  s.date = %q{2012-10-22}
   s.default_executable = %q{grope}
   s.description = %q{A non-GUI library to represent browser environment using WebKit Framework}
   s.email = %q{youpy@buycheapviagraonlinenow.com}
@@ -20,6 +20,9 @@ Gem::Specification.new do |s|
   ]
   s.files = [
     ".document",
+    ".rspec",
+    "Gemfile",
+    "Gemfile.lock",
     "LICENSE",
     "README.rdoc",
     "Rakefile",
@@ -39,39 +42,37 @@ Gem::Specification.new do |s|
     "lib/grope/web_resource_load_delegate.rb",
     "lib/grope/wso_wrapper.rb",
     "spec/env_spec.rb",
-    "spec/spec.opts",
     "spec/spec_helper.rb",
     "spec/wso_wrapper_spec.rb"
   ]
   s.homepage = %q{http://github.com/youpy/grope}
   s.require_paths = ["lib"]
-  s.rubygems_version = %q{1.5.0}
+  s.rubygems_version = %q{1.3.6}
   s.summary = %q{A non-GUI library to represent browser environment}
-  s.test_files = [
-    "examples/js_minifier.rb",
-    "examples/js_minifier_sinatra.rb",
-    "examples/map_generator.rb",
-    "examples/md5.rb",
-    "examples/patterns.rb",
-    "examples/url2png.rb",
-    "spec/env_spec.rb",
-    "spec/spec_helper.rb",
-    "spec/wso_wrapper_spec.rb"
-  ]
 
   if s.respond_to? :specification_version then
+    current_version = Gem::Specification::CURRENT_SPECIFICATION_VERSION
     s.specification_version = 3
 
-    if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
-      s.add_development_dependency(%q<rspec>, [">= 1.2.9"])
-      s.add_runtime_dependency(%q<mechanize>, [">= 1.0.0"])
+    if Gem::Version.new(Gem::RubyGemsVersion) >= Gem::Version.new('1.2.0') then
+      s.add_runtime_dependency(%q<httparty>, [">= 0"])
+      s.add_runtime_dependency(%q<mechanize>, ["= 2.0.1"])
+      s.add_development_dependency(%q<rspec>, ["~> 2.3.0"])
+      s.add_development_dependency(%q<jeweler>, ["~> 1.6.4"])
+      s.add_development_dependency(%q<rdoc>, [">= 0"])
     else
-      s.add_dependency(%q<rspec>, [">= 1.2.9"])
-      s.add_dependency(%q<mechanize>, [">= 1.0.0"])
+      s.add_dependency(%q<httparty>, [">= 0"])
+      s.add_dependency(%q<mechanize>, ["= 2.0.1"])
+      s.add_dependency(%q<rspec>, ["~> 2.3.0"])
+      s.add_dependency(%q<jeweler>, ["~> 1.6.4"])
+      s.add_dependency(%q<rdoc>, [">= 0"])
     end
   else
-    s.add_dependency(%q<rspec>, [">= 1.2.9"])
-    s.add_dependency(%q<mechanize>, [">= 1.0.0"])
+    s.add_dependency(%q<httparty>, [">= 0"])
+    s.add_dependency(%q<mechanize>, ["= 2.0.1"])
+    s.add_dependency(%q<rspec>, ["~> 2.3.0"])
+    s.add_dependency(%q<jeweler>, ["~> 1.6.4"])
+    s.add_dependency(%q<rdoc>, [">= 0"])
   end
 end
 
