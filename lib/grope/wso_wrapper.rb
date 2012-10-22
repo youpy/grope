@@ -86,3 +86,7 @@ end
 
 class OSX::NSCFString
 end
+
+class OSX::NSCFNumber
+end
+
